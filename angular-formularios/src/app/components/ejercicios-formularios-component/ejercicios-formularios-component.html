@@ -1,0 +1,229 @@
+<div class="container my-5">
+
+  <h1>Ejercicio 1: Registro de Usuario</h1>
+  <div class="card p-4 mb-5 border-primary">
+    <form #formE1="ngForm">
+      <div class="form-group mb-2">
+        <label>Nombre:</label>
+        <input type="text" class="form-control" name="nombre" [(ngModel)]="reg.nombre" required minlength="3" #nombreE1="ngModel">
+        @if (nombreE1.invalid && (nombreE1.touched || nombreE1.dirty)) {
+          <div class="text-danger">
+            @if (nombreE1.errors?.['required']) { <small>Nombre es requerido.</small> }
+            @if (nombreE1.errors?.['minlength']) { <small>Mínimo 3 caracteres.</small> }
+          </div>
+        }
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Correo:</label>
+        <input type="email" class="form-control" name="correo" [(ngModel)]="reg.correo" required email #correoE1="ngModel">
+        @if (correoE1.invalid && (correoE1.touched || correoE1.dirty)) {
+          <div class="text-danger">
+            @if (correoE1.errors?.['required']) { <small>Correo es requerido.</small> }
+            @if (correoE1.errors?.['email']) { <small>Formato de correo inválido.</small> }
+          </div>
+        }
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Contraseña:</label>
+        <input type="password" class="form-control" name="password" [(ngModel)]="reg.password" required minlength="6" #passE1="ngModel">
+        @if (passE1.invalid && (passE1.touched || passE1.dirty)) {
+          <div class="text-danger">
+            @if (passE1.errors?.['required']) { <small>Contraseña es requerida.</small> }
+            @if (passE1.errors?.['minlength']) { <small>Mínimo 6 caracteres.</small> }
+          </div>
+        }
+      </div>
+
+      <div class="form-group mb-3">
+        <label>Confirmar contraseña:</label>
+        <input type="password" class="form-control" name="confirm" [(ngModel)]="reg.confirm" required #confE1="ngModel">
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="formE1.invalid || reg.password !== reg.confirm">
+        Registrarse
+      </button>
+    </form>
+  </div>
+
+  <h1>Ejercicio 2: Formulario de Contacto</h1>
+  <div class="card p-4 mb-5 border-success">
+    <form #formE2="ngForm" (ngSubmit)="enviarContacto(formE2)">
+      <div class="form-group mb-2">
+        <label>Nombre Completo:</label>
+        <input type="text" class="form-control" name="nombre" [(ngModel)]="contacto.nombre" required #nomE2="ngModel">
+        @if (nomE2.invalid && nomE2.touched) { <div class="text-danger"><small>Campo obligatorio</small></div> }
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Correo Electrónico:</label>
+        <input type="email" class="form-control" name="correo" [(ngModel)]="contacto.correo" required email #corrE2="ngModel">
+        @if (corrE2.invalid && corrE2.touched) { <div class="text-danger"><small>Correo válido obligatorio</small></div> }
+      </div>
+
+      <div class="form-group mb-2">
+        <label>Mensaje:</label>
+        <textarea class="form-control" name="mensaje" [(ngModel)]="contacto.mensaje" required #msgE2="ngModel"></textarea>
+        @if (msgE2.invalid && msgE2.touched) { <div class="text-danger"><small>Campo obligatorio</small></div> }
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="formE2.invalid">Enviar</button>
+      
+      @if (exitoContacto) {
+        <div class="alert alert-success mt-3">¡Mensaje enviado con éxito!</div>
+      }
+    </form>
+  </div>
+
+  <h1>Ejercicio 3: Aceptar Términos</h1>
+  <div class="card p-4 mb-5 border-info">
+    <form #formE3="ngForm">
+      <div class="form-group mb-2">
+        <label>Nombre:</label>
+        <input type="text" class="form-control" name="nombre" [(ngModel)]="terminos.nombre" required>
+      </div>
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" name="aceptado" [(ngModel)]="terminos.aceptado" required id="chkTerminos">
+        <label class="form-check-label" for="chkTerminos">Acepto los términos y condiciones</label>
+      </div>
+      <button type="submit" class="btn btn-info" [disabled]="formE3.invalid">Continuar</button>
+    </form>
+  </div>
+
+  <h1>Ejercicio 4: Múltiples Teléfonos</h1>
+  <div class="card p-4 mb-5 border-warning">
+    <form #formE4="ngForm">
+      <div class="form-group mb-2">
+        <label>Nombre:</label>
+        <input type="text" class="form-control" name="nombre" [(ngModel)]="telefonos.nombre" required>
+      </div>
+      
+      <label>Teléfonos:</label>
+      @for (tel of telefonos.lista; track trackByIndex(i, tel); let i = $index) {
+        <div class="d-flex mb-2">
+          <input type="text" class="form-control me-2" name="tel{{i}}" [(ngModel)]="telefonos.lista[i]" required minlength="10" #telInput="ngModel">
+          <button type="button" class="btn btn-danger" (click)="quitarTelefono(i)" [disabled]="telefonos.lista.length === 1">X</button>
+        </div>
+        @if (telInput.invalid && (telInput.touched || telInput.dirty)) {
+          <div class="text-danger mb-2">
+             <small>Debe tener al menos 10 caracteres.</small>
+          </div>
+        }
+      }
+      <button type="button" class="btn btn-secondary mt-2 mb-3" (click)="agregarTelefono()">+ Agregar Teléfono</button>
+      <br>
+      <button type="submit" class="btn btn-warning" [disabled]="formE4.invalid">Guardar Teléfonos</button>
+    </form>
+  </div>
+
+  <h1>Ejercicio 5: Validar Contraseñas Iguales</h1>
+  <div class="card p-4 mb-5 border-danger">
+    <p class="text-muted">Nota: Este requisito también se integró en el Ejercicio 1, pero aquí se aísla la lógica.</p>
+    <div class="form-group mb-2">
+      <label>Contraseña:</label>
+      <input type="password" class="form-control" [(ngModel)]="reg.password">
+    </div>
+    <div class="form-group mb-2">
+      <label>Confirmar contraseña:</label>
+      <input type="password" class="form-control" [(ngModel)]="reg.confirm">
+    </div>
+    @if (reg.password && reg.confirm && reg.password !== reg.confirm) {
+      <div class="alert alert-danger mt-2">
+        Las contraseñas no coinciden.
+      </div>
+    } @else if (reg.password && reg.password === reg.confirm) {
+      <div class="alert alert-success mt-2">
+        Las contraseñas coinciden.
+      </div>
+    }
+  </div>
+
+  <h1>Ejercicio 6: Selects Dinámicos (Cascada)</h1>
+  <div class="card p-4 mb-5 border-secondary">
+    <div class="form-group mb-2">
+      <label>País:</label>
+      <select class="form-control" name="pais" [(ngModel)]="paisSeleccionado" (change)="actualizarDepartamentos()">
+        <option value="">Seleccione un país...</option>
+        @for (p of datosGeograficos; track p.pais) {
+          <option [value]="p.pais">{{ p.pais }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group mb-2">
+      <label>Departamento:</label>
+      <select class="form-control" name="depto" [(ngModel)]="departamentoSeleccionado" (change)="actualizarCiudades()" [disabled]="!departamentosDisponibles.length">
+        <option value="">Seleccione un departamento...</option>
+        @for (d of departamentosDisponibles; track d.nombre) {
+          <option [value]="d.nombre">{{ d.nombre }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Ciudad:</label>
+      <select class="form-control" name="ciudad" [(ngModel)]="ciudadSeleccionada" [disabled]="!ciudadesDisponibles.length">
+        <option value="">Seleccione una ciudad...</option>
+        @for (c of ciudadesDisponibles; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <h1>Ejercicio 7: Directiva de Mayúsculas</h1>
+  <div class="card p-4 mb-5 border-dark">
+    <label>Escribe aquí (se convertirá a mayúsculas automáticamente):</label>
+    <input type="text" class="form-control mt-2" name="texto" [(ngModel)]="textoMayusculas" appMayusculas>
+  </div>
+
+  <h1>Ejercicio 8: Simular Encuesta</h1>
+  <div class="card p-4 mb-5" style="border: 2px solid purple;">
+    <form #formE8="ngForm" (ngSubmit)="enviarEncuesta(formE8)">
+      
+      <label>¿Qué tan satisfecho estás?</label>
+      <div class="form-group mb-3">
+        @for (i of [1,2,3,4,5]; track i) {
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="satisfaccion" [value]="i.toString()" [(ngModel)]="encuesta.satisfaccion">
+            <label class="form-check-label">{{ i }}</label>
+          </div>
+        }
+      </div>
+
+      <div class="form-group mb-3">
+        <label>¿Recomendarías este servicio?</label>
+        <select class="form-control" name="recomendar" [(ngModel)]="encuesta.recomendar">
+          <option value="si">Sí</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="form-group mb-3">
+        <label>Comentarios adicionales:</label>
+        <textarea class="form-control" name="comentarios" [(ngModel)]="encuesta.comentarios"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary me-2">Enviar a consola</button>
+      <button type="button" class="btn btn-secondary" (click)="formE8.reset({ satisfaccion: '5', recomendar: 'si', comentarios: '' })">Resetear</button>
+    </form>
+  </div>
+
+  <h1>Ejercicio 9: Chat de Componentes</h1>
+  <div class="card p-4 mb-5">
+    <h3>Parent Component</h3>
+    <div class="form-group">
+      <label>Enter a Message:</label>
+      <input type="text" class="form-control" [(ngModel)]="mensajePadre">
+    </div>
+    <button class="btn btn-primary mt-2" (click)="enviarAHijo()">Send Message To Child</button>
+    <p class="mt-3">Message from Child: <strong>{{ mensajeRecibidoDeHijo || '...' }}</strong></p>
+
+    <app-chat-hijo 
+      [mensajeDesdePadre]="mensajeEnviadoAHijo" 
+      (mensajeEmitido)="recibirDeHijo($event)">
+    </app-chat-hijo>
+  </div>
+
+</div>
