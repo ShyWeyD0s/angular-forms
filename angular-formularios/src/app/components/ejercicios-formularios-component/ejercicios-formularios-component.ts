@@ -2,9 +2,7 @@ import { Component, Directive, HostListener, Input, Output, EventEmitter } from 
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
-// ==========================================
-// EJERCICIO 7: Directiva de Mayúsculas 
-// ==========================================
+// EJERCICIO 7: Directiva de Mayúsculas
 @Directive({
   selector: '[appMayusculas]',
   standalone: true
@@ -16,9 +14,7 @@ export class MayusculasDirective {
   }
 }
 
-// ==========================================
-// EJERCICIO 9: Componente Hijo (Chat)
-// ==========================================
+// EJERCICIO 9: Componente Hijo chat
 @Component({
   selector: 'app-chat-hijo',
   standalone: true,
@@ -46,9 +42,7 @@ export class ChatHijoComponent {
   }
 }
 
-// ==========================================
 // COMPONENTE PRINCIPAL: Ejercicios Formularios
-// ==========================================
 @Component({
   selector: 'app-ejercicios-formularios-component', // <-- Selector actualizado
   standalone: true,
